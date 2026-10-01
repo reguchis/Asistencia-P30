@@ -1,0 +1,11 @@
+CONTROL DE ASISTENCIA ESCOLAR - paquete PWA
+Sube TODO el contenido de esta carpeta (no la carpeta dentro de otra) a un hosting con HTTPS.
+
+NETLIFY (recomendado, desde computadora): entra a app.netlify.com/drop, arrastra esta carpeta. Te da un enlace https.
+GITHUB PAGES (se puede desde el celular): crea un repositorio publico, sube estos archivos (Add file > Upload files),
+  luego Settings > Pages > Deploy from a branch > main / root. El enlace queda https://USUARIO.github.io/REPO/
+CLOUDFLARE PAGES: Workers y Pages > Crear > Pages > Subir activos directos.
+
+INSTALAR: abre el enlace con internet una vez, espera a que cargue y usa 'Instalar app' / 'Anadir a pantalla de inicio'.
+Despues abre sin internet normalmente. Si actualizas archivos, cambia 'asistencia-v8' en sw.js por 'asistencia-v9'.
+Los datos se guardan en el celular y navegador donde se use. Respalda desde Ajustes.

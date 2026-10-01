@@ -7,5 +7,5 @@ GITHUB PAGES (se puede desde el celular): crea un repositorio publico, sube esto
 CLOUDFLARE PAGES: Workers y Pages > Crear > Pages > Subir activos directos.
 
 INSTALAR: abre el enlace con internet una vez, espera a que cargue y usa 'Instalar app' / 'Anadir a pantalla de inicio'.
-Despues abre sin internet normalmente. Si actualizas archivos, cambia 'asistencia-v8' en sw.js por 'asistencia-v9'.
+Despues abre sin internet normalmente. Si actualizas archivos, cambia 'asistencia-v9' en sw.js por 'asistencia-v10'.
 Los datos se guardan en el celular y navegador donde se use. Respalda desde Ajustes.

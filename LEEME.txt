@@ -1,11 +1,15 @@
-CONTROL DE ASISTENCIA ESCOLAR - paquete PWA
+CONTROL DE ASISTENCIA ESCOLAR - paquete PWA (version 11)
 Sube TODO el contenido de esta carpeta (no la carpeta dentro de otra) a un hosting con HTTPS.
+Archivos: index.html, sw.js, manifest.webmanifest, icon-192.png, icon-512.png y la carpeta lib (jsQR.js, qrcode.js).
 
-NETLIFY (recomendado, desde computadora): entra a app.netlify.com/drop, arrastra esta carpeta. Te da un enlace https.
-GITHUB PAGES (se puede desde el celular): crea un repositorio publico, sube estos archivos (Add file > Upload files),
+NETLIFY (desde computadora): entra a app.netlify.com/drop y arrastra esta carpeta. Te da un enlace https.
+GITHUB PAGES: crea un repositorio publico, sube estos archivos (Add file > Upload files),
   luego Settings > Pages > Deploy from a branch > main / root. El enlace queda https://USUARIO.github.io/REPO/
-CLOUDFLARE PAGES: Workers y Pages > Crear > Pages > Subir activos directos.
 
 INSTALAR: abre el enlace con internet una vez, espera a que cargue y usa 'Instalar app' / 'Anadir a pantalla de inicio'.
-Despues abre sin internet normalmente. Si actualizas archivos, cambia 'asistencia-v10' en sw.js por 'asistencia-v11'.
+Despues abre sin internet normalmente.
+
+ACTUALIZAR: sube los archivos nuevos al mismo sitio (reemplazan a los anteriores) y espera unos minutos.
+Abre la app con internet: se actualiza sola. En Ajustes veras 'Version de la app' (debe decir 11).
+Si sigue mostrando una version anterior: Ajustes > 'Buscar actualizacion' (no borra tus datos), o cierra la app y abrela de nuevo.
 Los datos se guardan en el celular y navegador donde se use. Respalda desde Ajustes.

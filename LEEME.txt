@@ -1,4 +1,4 @@
-CONTROL DE ASISTENCIA - 30 SANTO DOMINGO - paquete PWA (version 1.4)
+CONTROL DE ASISTENCIA - 30 SANTO DOMINGO - paquete PWA (version 1.5)
 Sube TODO el contenido de esta carpeta (no la carpeta dentro de otra) a un hosting con HTTPS.
 Archivos: index.html, sw.js, version.json, manifest.webmanifest, icon-192.png, icon-512.png
 y la carpeta lib (jsQR.js, qrcode.js).
@@ -15,6 +15,6 @@ ACTUALIZAR A UNA VERSION NUEVA:
 1. Reemplaza en el repositorio TODOS los archivos de este paquete (incluido version.json).
 2. Espera unos minutos a que GitHub publique los cambios.
 3. En la app: Ajustes > 'Buscar actualizacion', con internet. La app compara su version con version.json,
-   descarga la nueva y avisa 'App actualizada a la version 1.4'. Los datos no se borran.
+   descarga la nueva y avisa 'App actualizada a la version 1.5'. Los datos no se borran.
 La app tambien se actualiza sola al abrirla con internet.
 Los datos se guardan en el celular y navegador donde se use. Respalda desde Ajustes.

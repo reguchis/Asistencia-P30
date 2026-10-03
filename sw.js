@@ -1,4 +1,4 @@
-const C='asistencia-app-2.0',F=['index.html','manifest.webmanifest','icon-192.png','icon-512.png','lib/jsQR.js','lib/qrcode.js'];
+const C='asistencia-app-2.0.1',F=['index.html','manifest.webmanifest','icon-192.png','icon-512.png','lib/jsQR.js','lib/qrcode.js'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all(F.map(u=>fetch(new Request(u,{cache:'reload'})).then(r=>{if(!r.ok)throw new Error(u);return c.put(u,r)})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!=C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const q=e.request;if(q.method!='GET'||new URL(q.url).origin!=location.origin)return;

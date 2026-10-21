@@ -1,6 +1,6 @@
 /* 2.0.30: lo que la app pide «sin copia» (revisar si hay versión nueva) va directo a internet.
    2.0.24: al activarse borra SOLO sus propias copias viejas (asistencia-app-…); nunca las de la versión beta, que vive en el mismo sitio */
-const C='asistencia-app-2.0.41',F=['index.html','manifest.webmanifest','icon-192.png','icon-512.png','lib/jsQR.js','lib/qrcode.js'];
+const C='asistencia-app-2.0.42',F=['index.html','manifest.webmanifest','icon-192.png','icon-512.png','lib/jsQR.js','lib/qrcode.js'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all(F.map(u=>fetch(new Request(u,{cache:'reload'})).then(r=>{if(!r.ok)throw new Error(u);return c.put(u,r)})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!=C&&x.startsWith('asistencia-app-')).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const q=e.request;if(q.method!='GET'||new URL(q.url).origin!=location.origin)return;if(q.cache=='no-store')return;

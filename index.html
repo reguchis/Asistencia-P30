@@ -84,7 +84,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const ST={P:['✓ Asistencia','cP'],R:['⚠ Retardo','cR'],F:['✕ Falta','cF'],J:['ⓘ Permiso','cJ']};
 const LEG='<p class=leg><span class="ch cP">Asistencia</span> <span class="ch cR">Retardo</span> <span class="ch cF">Falta</span> <span class="ch cJ">Permiso</span> <span class="ch cN">Pendiente</span></p>';
 const DAYS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],DAYL=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],MESL=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-const VER='2.0.82';
+const VER='2.0.83';
 let cfg={tol:10,ant:10,pend:'F',doc:'',snd:true},tab='hoy',S=null,stream=null,scanning=false,last='',lastT=0,imp=[],FD='',ND='',NS=null,NO='',CD='';
 const opts=(a,f)=>a.map(f).join('');
 /* 2.0.9: singular/plural en un solo lugar */const PL=(n,a,b)=>n+' '+(n==1?a:b),SP=x=>String(x==null?'':x).trim().replace(/\s+/g,' ');
@@ -142,7 +142,7 @@ const fin=v=>{d.remove();removeEventListener('keydown',kd,true);if(v)svSet(k,v);
 d.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-sv]');if(b)return fin(b.dataset.sv);if(e.target===d)fin(null)});addEventListener('keydown',kd,true);
 document.body.appendChild(d)})}
 /* guarda o comparte un archivo: true si quedó guardado o compartido; false si se canceló */
-async function sOut(n,data,k,o){o=o||{};if(!svMov())return SVSAVE(n,data,o);const f=svFile(n,data);if(!f)return SVSAVE(n,data,o);
+async function sOut(n,data,k,o){o=o||{};if(!svMov())return SVSAVE(n,data,o);const f=svFile(n,data);if(!f){const r=await SVSAVE(n,data,o);if(r!==false&&navigator.share)setTimeout(()=>toast('Este tipo de archivo no se puede compartir desde el navegador: se guardó en el dispositivo (Descargas); compártelo desde ahí.'),300);return r}
 const c=await svAsk(k,n);if(!c){toast(o.cancel||'No se guardó ni se compartió el archivo.');return false}
 if(c=='dl'){const r=await SVSAVE(n,data,o);if(r!==false&&k=='bk')setTimeout(()=>toast('Respaldo guardado en el dispositivo. Guarda también una copia fuera de él (correo, Drive o WhatsApp a ti mismo).'),2200);return r!==false}
 try{await navigator.share({files:[f],title:o.title||n});toast((o.ok||'Archivo compartido: '+f.name)+(f.name!==n?' Va como '+f.name+' (mismo contenido): se abre y se recupera igual.':''));return true}
@@ -644,9 +644,11 @@ $('#hist').innerHTML='';$('#prev').innerHTML='';toast(gw||(e=='X'?'Reporte gener
 async function genAll(){const e=v('re');if(e!='D'&&v('r1')>v('r2'))return toast('La fecha inicial debe ser anterior o igual a la final');
 const sel=$('#rg'),ids=[...sel.options].map(o=>o.value).filter(x=>x!='ALL'),gm=Object.fromEntries((await all('groups')).map(g=>[g.id,g])),T0=toast,SI=Element.prototype.scrollIntoView,L=[],hl=[];let hf=null;
 toast=()=>{};Element.prototype.scrollIntoView=()=>{};
+/* mientras genera grupo por grupo, en pantalla siguen «Todos mis grupos» y su materia (copias quietas) y no se ven los reportes intermedios */
+const FX=[sel,$('#rs')].filter(Boolean).map(e=>{const c=e.cloneNode(true);c.removeAttribute('id');c.removeAttribute('onchange');c.value=e.value;c.disabled=true;e.before(c);e.style.display='none';return[e,c]}),OUT=$('#out'),OV=OUT?OUT.style.visibility:'';if(OUT)OUT.style.visibility='hidden';
 try{for(const id of ids){if(!gm[id])continue;sel.value=id;rsub();await genRep();const o=$('#out'),q=s=>o.querySelector(s);if(XT){hl.push(...HL);hf=HF}
 L.push({g:gm[id],ms:(RSB[id]||[]).join(', '),X:XT,err:q('#norep')?q('#norep').textContent:'',sum:q('.sumg')?q('.sumg').innerHTML:'',tab:q('#rtw')?q('#rtw').innerHTML:''})}}
-finally{toast=T0;Element.prototype.scrollIntoView=SI;sel.value='ALL';rsub();repS()}
+finally{toast=T0;Element.prototype.scrollIntoView=SI;sel.value='ALL';rsub();FX.forEach(([e,c])=>{c.remove();e.style.display=''});if(OUT)OUT.style.visibility=OV;repS()}
 HL=hl;HF=hf;rows=[];XTA=null;XT=null;
 const T={'':'Resumen general',P:'Solo asistencias',R:'Solo retardos',F:'Solo faltas',J:'Solo permisos',N:'Solo pendientes',D:'Asistencia del día '+v('rd'),X:'Clases no impartidas',L:'Detalle por fecha'}[e],
 nv=(x,k)=>x.X?+((x.X.sum.find(s=>s[0]==k)||[0,0])[1])||0:0,G=e=='D'?L.filter(x=>x.X&&(nv(x,'Clases del día')||nv(x,'No impartidas'))):L,X0=(G.find(x=>x.X)||{}).X;
@@ -973,7 +975,7 @@ const mdBulk0=async ops=>{const n=Object.keys(ops).filter(s=>ops[s].clr||ops[s].
 try{for(const s of n){const o=t.objectStore(s);if(ops[s].clr)o.clear();for(const k of ops[s].del)o.delete(k);for(const x of ops[s].put)o.put(x)}}catch(e){try{t.abort()}catch(x){}rej(e)}})};
 const mdCfg=c=>({doc:String(c&&c.doc||'').trim(),tol:c&&c.tol!=null?+c.tol:10,ant:c&&c.ant!=null&&+c.ant>=0?+c.ant:10,pend:c&&c.pend=='N'?'N':'F'});
 const mdF=t=>{const d=new Date(+t);return ymd(d)+' '+hm(d)};
-const mdMovil=()=>/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent);
+const mdMovil=()=>svMov();
 async function mdLocal(){const o={gone:{},goneA:{}};for(const s of MDS)o[s]=await tx(s,'readonly',x=>x.getAll());for(const r of await kvP(MDX)){const k=r.k.slice(MDX.length);o.gone[k]=+r.v||0;if(r.a)o.goneA[k]=1}const c=await get('kv','cfg');o.cfg=c?mdCfg(c.v):null;o.cfgU=c&&c.us&&typeof c.us=='object'?c.us:{};return o}
 async function mdSync(){const r=await get('kv','md|sync');return r&&r.v||{}}
 /* ¿ya se recibió antes de ese dispositivo? Entonces es tuyo aunque el nombre del docente no coincida (por ejemplo, si lo cambiaste en uno) */

@@ -113,7 +113,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const ST={P:['✓ Asistencia','cP'],R:['⚠ Retardo','cR'],F:['✕ Falta','cF'],J:['ⓘ Permiso','cJ']};
 const LEG='<p class=leg><span class="ch cP">Asistencia</span> <span class="ch cR">Retardo</span> <span class="ch cF">Falta</span> <span class="ch cJ">Permiso</span> <span class="ch cN">Pendiente</span></p>';
 const DAYS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],DAYL=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],MESL=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-const VER='2.1.27';
+const VER='2.1.28';
 let cfg={tol:10,ant:10,pend:'F',doc:'',snd:true,esc:''},tab='hoy',S=null,stream=null,scanning=false,last='',lastT=0,imp=[],FD='',ND='',NS=null,NO='',CD='';
 const opts=(a,f)=>a.map(f).join('');
 /* 2.0.9: singular/plural en un solo lugar */const PL=(n,a,b)=>n+' '+(n==1?a:b),SP=x=>String(x==null?'':x).trim().replace(/\s+/g,' ');
@@ -1011,12 +1011,14 @@ const sel=$('#rg'),SV=sel.value,PLA=allPl(SV),HPA=hvLee(),gm=Object.fromEntries(
 toast=()=>{};Element.prototype.scrollIntoView=()=>{};
 /* mientras genera grupo por grupo, en pantalla siguen «Todos mis grupos» y su materia (copias quietas) y no se ven los reportes intermedios */
 const FX=[sel,$('#rs')].filter(Boolean).map(e=>{const c=e.cloneNode(true);c.removeAttribute('id');c.removeAttribute('onchange');c.value=e.value;c.disabled=true;e.before(c);e.style.display='none';return[e,c]}),OUT=$('#out'),OV=OUT?OUT.style.visibility:'';if(OUT)OUT.style.visibility='hidden';
-/* 2.1.27: aviso de avance («Generando reporte… grupo 3 de 9») y una pausa entre grupos para que la pantalla no parezca congelada */
+/* 2.1.27: aviso de avance («Generando reporte… grupo 3 de 9») y una pausa entre grupos para que la pantalla no parezca congelada.
+   2.1.28: el aviso flota encima (no mueve la página) y el área del reporte conserva su alto mientras se arma: sin parpadeo */
 const GP=ids.length>1&&OUT?document.createElement('div'):null,gpU=(i,n)=>{if(GP)GP.innerHTML=`<b style="font-size:17px">Generando reporte…</b><p class=m style="margin:6px 0 10px">Grupo ${i} de ${ids.length}${n?' · '+esc(n):''}</p><div style="height:10px;border-radius:6px;background:var(--b);overflow:hidden"><div style="width:${Math.round(100*(i-1)/ids.length)}%;height:100%;background:var(--p)"></div></div><p class=m style="font-size:13px;margin:10px 0 0">Puedes esperar aquí; con muchos grupos tarda unos segundos.</p>`};
-if(GP){GP.className='card';GP.id='gprog';GP.style.cssText='text-align:center;padding:18px';GP.setAttribute('role','status');OUT.before(GP);gpU(1,'')}
+const OH=OUT?OUT.style.height:'',OO=OUT?OUT.style.overflow:'';if(OUT){OUT.style.height=OUT.offsetHeight+'px';OUT.style.overflow='hidden'}
+if(GP){GP.className='card';GP.id='gprog';GP.style.cssText='position:fixed;left:16px;right:16px;top:35%;z-index:20;max-width:420px;margin:0 auto;text-align:center;padding:18px;box-shadow:0 8px 30px #0008';GP.setAttribute('role','status');document.body.appendChild(GP);gpU(1,'')}
 let gi=0;try{for(const id of ids){gi++;if(!gm[id])continue;if(GP){gpU(gi,gm[id].name);await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)))}sel.value=id;rsub();await genRep();const o=$('#out'),q=s=>o.querySelector(s);if(XT){hl.push(...HL);hf=HF}
 L.push({g:gm[id],ms:(RSB[id]||[]).join(', '),X:XT,err:q('#norep')?q('#norep').textContent:'',sum:q('.sumg')?q('.sumg').innerHTML:'',tab:q('#rtw')?q('#rtw').innerHTML:''})}}
-finally{if(GP)GP.remove();toast=T0;Element.prototype.scrollIntoView=SI;sel.value=SV;rsub();FX.forEach(([e,c])=>{c.remove();e.style.display=''});if(OUT)OUT.style.visibility=OV;repS()}
+finally{if(GP)GP.remove();if(OUT){OUT.style.height=OH;OUT.style.overflow=OO}toast=T0;Element.prototype.scrollIntoView=SI;sel.value=SV;rsub();FX.forEach(([e,c])=>{c.remove();e.style.display=''});if(OUT)OUT.style.visibility=OV;repS()}
 HL=hl;HF=hf;rows=[];XTA=null;XT=null;
 const T={'':'Resumen general',P:'Solo asistencias',R:'Solo retardos',F:'Solo faltas',J:'Solo permisos',N:'Solo pendientes',D:'Asistencia del día '+fFe(v('rd')),X:'Clases no impartidas',L:'Detalle por fecha'}[e],
 nv=(x,k)=>x.X?+((x.X.sum.find(s=>s[0]==k)||[0,0])[1])||0:0,G=e=='D'?L.filter(x=>x.X&&(nv(x,'Clases del día')||nv(x,'No impartidas'))):L,X0=(G.find(x=>x.X)||{}).X;

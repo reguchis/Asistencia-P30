@@ -52,8 +52,7 @@ details.ms{border-top:1px solid var(--b)}details.ms>summary{font-weight:700;font
 .hvpk{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:10px 0}.hvsw{height:42px;padding:0;border-radius:10px;font-weight:800;font-size:12px;border:0;min-width:0}
 #dlg [hidden]{display:none!important}#dlg input[type=color]{height:44px;padding:2px 4px}.hvqs{text-align:left}.hvq{display:inline-block;min-width:44px;min-height:36px;padding:6px 10px;margin:3px 6px 3px 0;border-radius:8px;font-weight:800;font-size:13px;border:0}.hvq0{display:inline-block;margin:2px 6px 2px 0;font-size:13px}
 .hvdot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}.hvg th.hvhy{background:var(--p);color:var(--pt,#fff)}.hvg td.hvh.hvnw{color:var(--p);box-shadow:inset 3px 0 0 var(--p)}
-small{font-size:max(12px,.83em)}label:has(>#xlsk){min-height:44px;cursor:pointer}#toast{pointer-events:none}#toast .tbn{pointer-events:auto}</style><style>/* 2.1.21: fecha de la portada siempre en un renglón, igual en las tres apps */.hd{flex-wrap:wrap;column-gap:8px;row-gap:2px}.hd .dd,.hd .fec{white-space:nowrap}
-@media(max-width:599px){.hd .dd,.hd .fec{font-size:clamp(12px,3.7vw,15px)}.hd .hr,.hd .hora{font-size:clamp(26px,8.2vw,34px)}.hd .hr small,.hd .hora small{font-size:clamp(12px,3.7vw,15px)}}</style>
+small{font-size:max(12px,.83em)}label:has(>#xlsk){min-height:44px;cursor:pointer}#toast{pointer-events:none}#toast .tbn{pointer-events:auto}</style><style>/* 2.1.22: fecha de la portada en un renglón, con el tamaño original de Asistencia (15 px fecha, 34 px hora) */.hd{flex-wrap:wrap;column-gap:12px;row-gap:2px}.hd .dd,.hd .fec{white-space:nowrap}</style>
 </head><body><header id=apph><svg viewBox="0 0 100 100" width="36" height="36" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#1d4ed8"/><path d="M30 52l14 14 28-32" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg><button class=g id=salb title="Salir de la app" aria-label="Salir de la app" onclick="salir()"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 3v8"/><path d="M6.3 7.2a8 8 0 1 0 11.4 0"/></svg></button><button class=g id=helpb title="Ayuda de esta pantalla" aria-label="Ayuda de esta pantalla" onclick="ayuda()">?</button><div><b>Control de Asistencia</b><span hidden></span></div></header><div id=updb hidden><span></span><button onclick="doUpd()">Actualizar</button><button class=g aria-label="Cerrar aviso" onclick="this.parentNode.hidden=true">✕</button></div><div id=tophd hidden><div id=hdh class=hd></div><p class=dcl id=tdc></p><div id=hcl class=hc hidden><span class=l></span><span class=r></span></div></div><div id="app"></div>
 <nav><button onclick="go('hoy')" id="t-hoy">Hoy</button><button onclick="go('alu')" id="t-alu">Alumnos</button><button onclick="go('hor')" id="t-hor">Horario</button><button onclick="go('rep')" id="t-rep">Reportes</button><button onclick="go('aju')" id="t-aju">Ajustes</button></nav>
 <script src="lib/jsQR.js"></script>
@@ -107,7 +106,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const ST={P:['✓ Asistencia','cP'],R:['⚠ Retardo','cR'],F:['✕ Falta','cF'],J:['ⓘ Permiso','cJ']};
 const LEG='<p class=leg><span class="ch cP">Asistencia</span> <span class="ch cR">Retardo</span> <span class="ch cF">Falta</span> <span class="ch cJ">Permiso</span> <span class="ch cN">Pendiente</span></p>';
 const DAYS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],DAYL=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],MESL=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-const VER='2.1.21';
+const VER='2.1.22';
 let cfg={tol:10,ant:10,pend:'F',doc:'',snd:true,esc:''},tab='hoy',S=null,stream=null,scanning=false,last='',lastT=0,imp=[],FD='',ND='',NS=null,NO='',CD='';
 const opts=(a,f)=>a.map(f).join('');
 /* 2.0.9: singular/plural en un solo lugar */const PL=(n,a,b)=>n+' '+(n==1?a:b),SP=x=>String(x==null?'':x).trim().replace(/\s+/g,' ');
@@ -1601,4 +1600,15 @@ addEventListener('unhandledrejection',e=>{BUSY=false;toast('Ocurrió un error: '
 document.addEventListener('visibilitychange',async()=>{if(document.visibilityState=='visible'&&scanning&&'wakeLock'in navigator)try{wl=await navigator.wakeLock.request('screen')}catch(z){}});
 setInterval(()=>{const a=document.activeElement;if(tab=='hoy'&&!S&&!(a&&/INPUT|SELECT/.test(a.tagName))&&!($('#xs')&&$('#xs').value)&&!($('#cxs')&&($('#cxs').value||v('cx1')||v('cx2')))&&!($('#dn')&&$('#dn').value)&&!($('#np')&&$('#np').innerHTML)&&!$('#dlg'))hoyTick()},30000);(async()=>{try{const t=localStorage.getItem('th');if(t&&t!='auto')document.documentElement.dataset.theme=t}catch(e){}try{navigator.storage.persist()}catch(e){}try{const nv=new URLSearchParams(location.search).get('v');if(nv){history.replaceState(null,'',location.pathname);setTimeout(()=>toast(nv==VER?'App actualizada a la versión '+VER:'La versión '+nv+' aún no está publicada por completo: sigues en la '+VER+'. Revisa que se subieron todos los archivos.'),600)}}catch(e){}await cfgLee();show();setTimeout(autoUpd,1200)})();
 if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').then(r=>r.update()).catch(()=>{}));
-</script></body></html>
+</script><script>/* 2.1.22: la fecha y la hora de la portada usan la letra más grande que cabe en un renglón en cada celular */
+(function(){var box=document.getElementById('tophd');if(!box||!window.MutationObserver)return;var busy=false;
+function fit(){if(busy)return;var h=box.querySelector('.hd');if(!h||!h.offsetParent)return;var L=h.children[0],R=h.children[1];if(!L||!R)return;var D=L.children[1],S=R.querySelector('small');busy=true;
+try{R.style.fontSize='';if(D)D.style.fontSize='';if(S)S.style.fontSize='';
+var wr=function(){return R.offsetTop>L.offsetTop+L.offsetHeight/2||(D&&D.scrollWidth>D.clientWidth+1)};
+if(wr()){var c=parseFloat(getComputedStyle(R).fontSize),d=D?parseFloat(getComputedStyle(D).fontSize):15,k=1;
+while(wr()&&k>.76){k-=.02;R.style.fontSize=(c*k).toFixed(1)+'px';var e=Math.max(12,d*k).toFixed(2)+'px';if(D)D.style.fontSize=e;if(S)S.style.fontSize=e}}}finally{setTimeout(function(){busy=false},0)}}
+new MutationObserver(fit).observe(box,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']});
+addEventListener('resize',fit);addEventListener('orientationchange',function(){setTimeout(fit,300)});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);setTimeout(fit,0)})();
+</script>
+</body></html>

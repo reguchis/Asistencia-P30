@@ -105,7 +105,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const ST={P:['✓ Asistencia','cP'],R:['⚠ Retardo','cR'],F:['✕ Falta','cF'],J:['ⓘ Permiso','cJ']};
 const LEG='<p class=leg><span class="ch cP">Asistencia</span> <span class="ch cR">Retardo</span> <span class="ch cF">Falta</span> <span class="ch cJ">Permiso</span> <span class="ch cN">Pendiente</span></p>';
 const DAYS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],DAYL=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],MESL=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-const VER='2.1.19';
+const VER='2.1.20';
 let cfg={tol:10,ant:10,pend:'F',doc:'',snd:true,esc:''},tab='hoy',S=null,stream=null,scanning=false,last='',lastT=0,imp=[],FD='',ND='',NS=null,NO='',CD='';
 const opts=(a,f)=>a.map(f).join('');
 /* 2.0.9: singular/plural en un solo lugar */const PL=(n,a,b)=>n+' '+(n==1?a:b),SP=x=>String(x==null?'':x).trim().replace(/\s+/g,' ');
@@ -131,7 +131,7 @@ const topHd=()=>{const n=new Date();return`<div><div class="dw">${DAYL[n.getDay(
 topDc=()=>cfg.doc?`Docente: <b>${esc(cfg.doc)}</b>`:'<span class="wa">Falta tu nombre: escríbelo en Ajustes › Configuración</span>';
 function topUpd(){const b=document.getElementById('tophd');if(!b)return;const off=!['hoy','alu','hor','rep','aju'].includes(tab)||!!app.querySelector('.np,#qsh,#qrr,#fix,#cap,#camBtn,#byeh');if(b.hidden!==off)b.hidden=off;if(off)return;const h=document.getElementById('hdh'),d=document.getElementById('tdc'),c=document.getElementById('hcl'),full=tab=='hoy';/* 2.0.44: completo en Hoy; en las demás pestañas solo fecha y hora */
 if(h.hidden!==!full){h.hidden=!full;d.hidden=!full;c.hidden=full}
-if(full){const x=topHd(),y=topDc();if(h.innerHTML!==x)h.innerHTML=x;if(d.innerHTML!==y)d.innerHTML=y}else{const n=new Date(),l=c.firstChild,r=c.lastChild,a=`${DAYL[n.getDay()]} ${n.getDate()} de ${MESL[n.getMonth()]} de ${n.getFullYear()}`,t=h12(n);if(l.textContent!==a)l.textContent=a;if(r.innerHTML!==t)r.innerHTML=t}}
+if(full){const x=topHd(),y=topDc();if(h.innerHTML!==x)h.innerHTML=x;if(d.innerHTML!==y)d.innerHTML=y}else{const n=new Date(),l=c.firstChild,r=c.lastChild,a=`${DAYL[n.getDay()]} ${n.getDate()} ${MESL[n.getMonth()]} ${n.getFullYear()}`,t=h12(n);if(l.textContent!==a)l.textContent=a;if(r.innerHTML!==t)r.innerHTML=t}}
 new MutationObserver(()=>topUpd()).observe(app,{childList:true});setInterval(topUpd,15000);
 async function hoyTick(){if(tab!='hoy')return;const k=SHN,x=await hoy();if(k!=SHN||tab!='hoy')return;if(LASTX!=null&&hoyZ(x)===hoyZ(LASTX)){/* 2.0.41: cambia solo el encabezado (día, fecha y hora) */const m=x.match(/<!--hd--><div id=hdh class=hd>([\s\S]*?)<\/div><!--\/hd-->/),h=document.getElementById('hdh');if(m&&h){const q=document.createElement('div');q.innerHTML=m[1];if(h.innerHTML!==q.innerHTML)h.innerHTML=q.innerHTML}}else app.innerHTML=x;LASTX=x}
 async function saveFile(n,data,pre){const lb=(pre?pre+'. ':'')+(/^reporte|_Reporte_/.test(n)?'Reporte exportado: ':'Archivo generado: ')+n;try{if(window.claude&&claude.use){const d=await claude.use('downloads');if(d){await d.save({filename:n,data});toast(lb);return true}}}catch(e){if(e&&e.code=='declined'){toast('Descarga cancelada');return false}}

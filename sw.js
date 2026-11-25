@@ -1,6 +1,6 @@
 /* 2.0.30: lo que la app pide «sin copia» (revisar si hay versión nueva) va directo a internet.
    2.0.24: al activarse borra SOLO sus propias copias viejas (asistencia-app-…); nunca las de la versión beta, que vive en el mismo sitio */
-const C='asistencia-app-2.1.31',F=['index.html','manifest.webmanifest','icon-192-v3.png','icon-512-v3.png','icon-maskable-512-v3.png','apple-touch-icon-v3.png','favicon-32-v3.png','lib/jsQR.js','lib/qrcode.js'];
+const C='asistencia-app-2.1.32',F=['index.html','manifest.webmanifest','icon-192-v3.png','icon-512-v3.png','icon-maskable-512-v3.png','apple-touch-icon-v3.png','favicon-32-v3.png','lib/jsQR.js','lib/qrcode.js'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all(F.map(u=>fetch(new Request(u,{cache:'reload'})).then(r=>{if(!r.ok)throw new Error(u);return c.put(u,r)})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!=C&&x.startsWith('asistencia-app-')).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 /* 2.1.31: el manifiesto y los íconos se piden primero a internet (3 s); sin conexión se usa la copia. Así el teléfono ve el ícono nuevo. */

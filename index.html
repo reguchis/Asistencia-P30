@@ -65,7 +65,16 @@ button.bt-s{background:var(--oks);color:var(--ok);border:1.5px solid var(--ok)}
 button.bt-c{background:transparent;color:var(--p);border:1.5px solid var(--p)}
 button.bt-d{background:transparent;color:var(--er);border:1.5px solid var(--er)}
 button.bt-a{background:transparent;border:1.5px dashed var(--m)}
-button.bt-x{color:var(--er)}
+button.bt-x{color:var(--dg)}
+/* rojo de borrar: el mismo tono que Ajedrez (en modo oscuro, salmón suave con letra oscura) */
+:root{--dg:#a3312a}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--dg:#ec8279}}
+:root[data-theme=dark]{--dg:#ec8279}
+button.bt-d{color:var(--dg);border-color:var(--dg)}
+button[style*="background:var(--er)"]{background:var(--dg)!important;color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) button[style*="background:var(--er)"]{color:var(--bg)}}
+:root[data-theme=dark] button[style*="background:var(--er)"]{color:var(--bg)}
+
 button.bt-h,.sb button,.tb button,#mch button{min-height:44px}
 button.wf,button.mdb,button.bt-d,button.bt-t,button.bt-c,button.bt-s,button[onclick^="prPed"],button[onclick^="bkW"],button[onclick^="tBkW"]{min-height:44px}
 .apd button,#gdi .gdcp button{min-height:40px}
@@ -450,7 +459,7 @@ function fixEnd(){if(S&&S.id)hfSet(S,(S.st||[]).filter(s=>!(S.map||{})[s.id]).le
 async function capH(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return'';if(d>=ymd(new Date()))return'<p class=er style="margin:8px 0 0">Elige un día anterior a hoy. Las clases de hoy se toman en «Mis clases de hoy».</p>';
 const L=await niPlan(d),gs=await all('groups');
 return`<p style="margin:12px 0 4px"><b>${DAYL[new Date(d+'T00:00').getDay()]} ${d}</b></p>${L.length?`<div class=tbl><table class=lt id=cpt>${opts(L,x=>`<tr><td><b>${esc(x.c.subject)}</b> · ${esc(x.gn)}<br><small>${x.c.start}–${x.c.end}${x.s?x.s.ni?' · ⊘ No impartida: '+esc(x.s.why||''):x.s.closed?' · ✓ Ya registrada':' · Sin cerrar':''}</small></td><td class="tr ev">${x.s?x.s.ni?'':x.s.closed?`<button class=g onclick="fixS('${x.s.id}')">Corregir</button>`:`<button class=g onclick="openS('${x.s.id}')">Continuar</button>`:`<button onclick="capS('${x.c.id}')">Capturar</button><button class=g onclick="capNi('${x.c.id}')">No impartida</button>`}</td></tr>`)}</table></div>`:'<p class=m style="margin:4px 0 0">No tienes clases en tu horario ese día de la semana.</p>'}
-<p class=m style="margin:14px 0 4px;font-size:13px">¿Una clase fuera de tu horario ese día (extraordinaria o sustitución)?</p><div class=row><label class="m rl">Grupo<select id=cxg>${opts(gs,g=>`<option value=${g.id}>${esc(g.name)}</option>`)}</select></label><label class="m rl">Materia${matSel('cxs',(await matL(gs)).L,'')}</label></div><div class="row tm"><label class="m rl">Inicio<input type=time id=cx1></label><label class="m rl">Término<input type=time id=cx2></label></div><button class=g onclick="capX()">Capturar extraordinaria</button>`}
+<p class=m style="margin:14px 0 4px;font-size:13px">¿Una clase fuera de tu horario ese día (extraordinaria o sustitución)?</p><div class=row><label class="m rl">Grupo<select id=cxg>${opts(gs,g=>`<option value=${g.id}>${esc(g.name)}</option>`)}</select></label><label class="m rl">Materia${matSel('cxs',(await matL(gs)).L,'')}</label></div><div class="row tm"><label class="m rl">Inicio<input type=time id=cx1></label><label class="m rl">Término<input type=time id=cx2></label></div><button class="g wf" onclick="capX()">Capturar extraordinaria</button>`}
 async function capL(){CD=v('cpd');const e=$('#cpl');if(e)e.innerHTML=CD?await capH(CD):''}
 async function capNi(cid){const c=await get('classes',cid),gs=await all('groups'),d=CD;if(!c||!d)return show();const gn=(gs.find(x=>x.id==c.gid)||{}).name||'?';
 dlg('Clase no impartida',`<p style="margin:8px 0 2px"><b>${esc(c.subject)}</b> · ${esc(gn)} · ${niDia(d)} · ${c.start}–${c.end}</p><p class=m style="margin:0 0 8px;font-size:13px">La clase queda sin lista y nadie recibe falta. Elige el motivo:</p><div class=row>${niSel('nc',1,null,'')}</div>`,async()=>{const w=niVal('nc',1);if(!w)return'Escribe el motivo';

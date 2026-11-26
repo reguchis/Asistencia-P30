@@ -1,10 +1,21 @@
-CONTROL DE ASISTENCIA - paquete PWA (version 2.2.2). Es la unica version: subela al repositorio de Asistencia que ya usas.
+CONTROL DE ASISTENCIA - paquete PWA (version 2.3.0). Es la unica version: subela al repositorio de Asistencia que ya usas.
 Repositorio: Asistencia-P30   Enlace: https://reguchis.github.io/Asistencia-P30/
 IMPORTANTE: no cambies el nombre del repositorio. Los celulares reconocen la app por esa direccion;
 si cambia, el icono deja de actualizarse solo y cada docente tendria que reinstalar la app.
 Sube TODO el contenido de esta carpeta (no la carpeta dentro de otra) a un hosting con HTTPS.
 Archivos: index.html, sw.js, version.json, manifest.webmanifest, icon-192-v3.png, icon-512-v3.png, icon-maskable-512-v3.png, apple-touch-icon-v3.png y favicon-32-v3.png (íconos nuevos desde la 2.1.24; los icon-192.png e icon-512.png anteriores ya no se usan y puedes borrarlos del repositorio)
 y la carpeta lib (jsQR.js, qrcode.js).
+
+NOVEDADES 2.3.0
+- Corregido: al tocar Guardar en Ajustes > Configuracion se perdian los colores y horas del horario, los otros planteles y los motivos de clase no impartida.
+- Ajustes agrupado en 7 tarjetas (Mis datos y respaldo, Configuracion, Parciales, Mas opciones, Ayuda y version, Borrar datos). Nada se quito.
+- Hoy: cada clase con Tomar y un boton ... (adentro: No impartida).
+- Parciales: boton 'Usar las fechas de Tareas'.
+- Un respaldo de Tareas ya no se puede restaurar aqui por error.
+- Google Drive: en celular y tablet se entra a Google en la misma pantalla (sin pagina en blanco). Dice 'En prueba'.
+- Huella de version: si se publica un cambio sin subir el numero, los aparatos se actualizan igual.
+- GOOGLE CLOUD (una sola vez, antes de subir): en la llave OAuth de 'Apps P30' agrega en 'URI de redireccionamiento autorizados':
+  https://reguchis.github.io/Asistencia-P30/  https://reguchis.github.io/Tareas-P30/  https://reguchis.github.io/Ajedrez-P30/
 
 GITHUB PAGES: en tu repositorio, Add file > Upload files, sube todos los archivos (reemplazan a los anteriores)
   y pulsa Commit changes. La primera vez: Settings > Pages > Deploy from a branch > main / root.
@@ -18,6 +29,6 @@ ACTUALIZAR A UNA VERSION NUEVA:
 1. Reemplaza en el repositorio TODOS los archivos de este paquete (incluido version.json).
 2. Espera unos minutos a que GitHub publique los cambios (el aviso de version nueva sale cuando ya esta completa).
 3. En la app: Ajustes > Actualizaciones > 'Buscar actualizacion', con internet. La app compara su version con version.json,
-   descarga la nueva y avisa 'App actualizada a la version 2.2.2'. Los datos no se borran.
+   descarga la nueva y avisa 'App actualizada a la version 2.3.0'. Los datos no se borran.
 La app tambien se actualiza sola al abrirla con internet.
 Los datos se guardan en el celular y navegador donde se use. Respalda desde Ajustes.

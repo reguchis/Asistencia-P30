@@ -1,10 +1,14 @@
-CONTROL DE ASISTENCIA - paquete PWA (version 2.3.1). Es la unica version: subela al repositorio de Asistencia que ya usas.
+CONTROL DE ASISTENCIA - paquete PWA (version 2.3.2). Es la unica version: subela al repositorio de Asistencia que ya usas.
 Repositorio: Asistencia-P30   Enlace: https://reguchis.github.io/Asistencia-P30/
 IMPORTANTE: no cambies el nombre del repositorio. Los celulares reconocen la app por esa direccion;
 si cambia, el icono deja de actualizarse solo y cada docente tendria que reinstalar la app.
 Sube TODO el contenido de esta carpeta (no la carpeta dentro de otra) a un hosting con HTTPS.
 Archivos: index.html, sw.js, version.json, manifest.webmanifest, icon-192-v3.png, icon-512-v3.png, icon-maskable-512-v3.png, apple-touch-icon-v3.png y favicon-32-v3.png (íconos nuevos desde la 2.1.24; los icon-192.png e icon-512.png anteriores ya no se usan y puedes borrarlos del repositorio)
 y la carpeta lib (jsQR.js, qrcode.js).
+
+NOVEDADES 2.3.2
+- Google Drive: 'Recuperar' una copia de los ultimos dias ya muestra que cambiaria y pide confirmacion aunque el permiso de Google haya vencido.
+- Despues de entrar a Google, 'Salir' vuelve a cerrar la app (ya no aparece 'Este telefono no permite que la app se cierre sola').
 
 NOVEDADES 2.3.1
 - Al volver de Google (Drive) la app abre directo en Ajustes > Google Drive, sin pasar por Hoy.
@@ -33,6 +37,6 @@ ACTUALIZAR A UNA VERSION NUEVA:
 1. Reemplaza en el repositorio TODOS los archivos de este paquete (incluido version.json).
 2. Espera unos minutos a que GitHub publique los cambios (el aviso de version nueva sale cuando ya esta completa).
 3. En la app: Ajustes > Actualizaciones > 'Buscar actualizacion', con internet. La app compara su version con version.json,
-   descarga la nueva y avisa 'App actualizada a la version 2.3.1'. Los datos no se borran.
+   descarga la nueva y avisa 'App actualizada a la version 2.3.2'. Los datos no se borran.
 La app tambien se actualiza sola al abrirla con internet.
 Los datos se guardan en el celular y navegador donde se use. Respalda desde Ajustes.
